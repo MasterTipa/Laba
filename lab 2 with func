@@ -23,6 +23,7 @@ private:
 	string name;
 	string diagnosis;
 	friend class Veterinar;
+	friend void out();
 };
 class Veterinar
 {
@@ -58,7 +59,7 @@ public:
 		rewind(stdin);
 	}
 };
-
+void out();
 void InterName();
 void InterDiagnos();
 void InterId();
@@ -74,6 +75,7 @@ int main()
 	InterId();		cout << "\n" << gg->GetId();
 	InterDiagnos();	cout << "\n" << gg->GetDiagnos();
 	funtime();
+	out();
 }
 void InterName()
 {
@@ -103,5 +105,10 @@ void funtime()
 	gh->IN(*gg);	cout << "\n" << gg->GetName();
 	gh->II(*gg);	cout << "\n" << gg->GetId();
 	gh->ID(*gg);	cout << "\n" << gg->GetDiagnos();
-
 }
+void out() {
+	cout << "\nТеперь всё то же самое, но через дружественную функцию...\n";
+	gh->IN(*gg);	cout << "\n" << gg->GetName();
+	gh->II(*gg);	cout << "\n" << gg->GetId();
+	gh->ID(*gg);	cout << "\n" << gg->GetDiagnos();
+};
