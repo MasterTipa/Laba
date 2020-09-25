@@ -64,8 +64,10 @@ void InterName();
 void InterDiagnos();
 void InterId();
 void funtime();
+void funtime20(int);
 Kotik* gg;
 Veterinar* gh;
+Kotik* mass = new Kotik[5];//Тот самый массив, который сразу не заметил
 int main()
 {
 	setlocale(LC_ALL, "Russian");//В память о великом преподователе
@@ -76,6 +78,10 @@ int main()
 	InterDiagnos();	cout << "\n" << gg->GetDiagnos();
 	funtime();
 	out();
+	for (int i = 0;i < 5;i++)
+	{
+		funtime20(i);
+	}
 }
 void InterName()
 {
@@ -112,3 +118,10 @@ void out() {
 	gh->II(*gg);	cout << "\n" << gg->GetId();
 	gh->ID(*gg);	cout << "\n" << gg->GetDiagnos();
 };
+void funtime20(int j)
+{
+	cout << "\nТеперь всё то же самое, но через дружественный класс...\n";
+	gh->IN(*(mass+j));	cout << "\n" << (mass+j)->GetName();
+	gh->II(*(mass+j));	cout << "\n" << (mass+j)->GetId();
+	gh->ID(*(mass+j));	cout << "\n" << (mass+j)->GetDiagnos();
+}
