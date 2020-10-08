@@ -1,9 +1,9 @@
-//1.	Создать проект консольной программы.
-//2.	Создать базовый класс согласно заданию.Все данные класса описать в закрытой секции, все методы класса реализовать как открытые.
-//3.	Создать конструктор по умолчанию, конструктор инициализации и конструктор копирования.Конструкторы должны выделять память для данных
+//1.+	Создать проект консольной программы.       
+//2.+	Создать базовый класс согласно заданию.Все данные класса описать в закрытой секции, все методы класса реализовать как открытые.
+//3.+	Создать конструктор по умолчанию, конструктор инициализации и конструктор копирования.Конструкторы должны выделять память для данных
 //динамически с использованием оператора new.
-//4.	Создать деструктор, который будет освобождать динамически выделенную память с помощью оператора delete.
-//5.	Создать в классе методы доступа к одиночному элементу данных объекта(по чтению и записи), отображения данных на экран, 
+//4.+	Создать деструктор, который будет освобождать динамически выделенную память с помощью оператора delete.
+//5.+	Создать в классе методы доступа к одиночному элементу данных объекта(по чтению и записи), отображения данных на экран, 
 //преобразования данных объекта(например, сортировки).
 //6.	Перегрузить операторы - члены класса(согласно варианту) :
 //	--присвоение = ;
@@ -21,7 +21,7 @@
 //10.	В головной функции динамически создать массив экземпляров класса.Каждый из них проинициализировать.Выполнить доступ к элементам 
 //данных экземпляров классов.Удалить массивы.
 //Класс									Одномерный массив с элементами типа int
-//Операторы-члены класса				бинарные арифметические (+ и   ) , причем только для однотипных операндов;
+//Операторы-члены класса				бинарные арифметические (+ и  -) , причем только для однотипных операндов;
 //Дружественные функции-операторы		вывода в поток (<<)
 //Сортировка							Шелла по возрастанию
 #define _CRT_SECURE_NO_WARNINGS
@@ -29,19 +29,115 @@
 #include <string>
 #include <ctime>
 
+using namespace std;
+
+int input();
 class MShell 
 {
+public:
+	MShell();
+	MShell(int);
+	MShell(MShell&);
+	~MShell();
 	friend class Shell;
+	friend void show(MShell);
+	//friend void ShellSort(MShell);
+	void ShellSort()
+	{
+		int step, i, j, tmp;
+		// Выбор шага
+		//cout << "\n\n\n" << array.ss << " " << *array.zn << " " << *(array.zn+1) << " " << endl;
+		for (step = ss / 2; step > 0; step /= 2)
+			// Перечисление элементов, которые сортируются на определённом шаге
+			for (i = step; i < ss; i++)
+				// Перестановка элементов внутри подсписка, пока i-тый не будет отсортирован
+				for (j = i - step; j >= 0 && *(zn + j) > * (zn + j + step); j -= step)
+				{
+					swap(*(zn + j + step), *(zn + j));
+					/*tmp = *(array.zn+j);
+					*(array.zn+j) = *(array.zn+j + step);
+					*(array.zn+j + step) = tmp;
+				*/
+				}
+	}
+	void ReadMass(int size) {
+		zn = new int[size];
+		ss = size;
+		for (int i = 0;i < size;i++)
+			zn[i] = input();
+	};
+	MShell operator+();
+	MShell operator-();
+	//friend MShell operator<<();
 private:
-	int zn;
+	int* zn;
+	int ss;
 };
-class Shell
+MShell::MShell()
 {
-
+	//cout << "1"<<endl;
+	zn = new int[1];
+	ss = 1;
+		zn[ss-1] = rand() % 100;
 };
-using namespace std;
+MShell::MShell(int size)
+{
+	//cout << "2" << endl;
+	zn = new int[size];
+	ss = size;
+	for (int i = 0;i < size;i++)
+		zn[i] = rand() % 100;
+};
+MShell::MShell(MShell& copy)
+{
+	//cout << "3" << endl;
+	ss = copy.ss;
+	zn = new int[ss];
+	for (int i = 0;i < ss;i++)
+		zn[i] = copy.zn[i];
+};
+MShell::~MShell() {
+	//cout << "4" << endl;
+	while(!zn) delete[] zn;
+};
+void show(MShell);
 int main()
 {
-
-
+	int sz = 5;
+	srand(time_t(NULL));
+	MShell mas;
+	mas=MShell();
+	show(mas);
+	mas=MShell(sz);
+	show(mas);
+	mas.ShellSort();
+	show(mas);
+	cout << "Size of mas :";
+	sz=input();
+	cout << "\nTime to read mas";
+	mas.ReadMass(sz);
+	show(mas);
+	mas.ShellSort();
+	show(mas);
+	return 0;
+}
+void show(MShell body) 
+{
+	for (int i = 0;i < body.ss;i++)
+		cout << body.zn[i]<<" ";
+	cout << endl;
+}
+int input() {
+	int i = 1, _int;
+	while (i)
+	{
+		cin >> _int;
+		if (!cin) {
+			cout << "Yarik, buffer potik\n";
+			rewind(stdin);
+			cin.clear();
+		}
+		else i = 0;
+	}
+	return _int;
 }
