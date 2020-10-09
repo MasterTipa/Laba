@@ -1,29 +1,3 @@
-//1.+	Создать проект консольной программы.       
-//2.+	Создать базовый класс согласно заданию.Все данные класса описать в закрытой секции, все методы класса реализовать как открытые.
-//3.+	Создать конструктор по умолчанию, конструктор инициализации и конструктор копирования.Конструкторы должны выделять память для данных
-//динамически с использованием оператора new.
-//4.+	Создать деструктор, который будет освобождать динамически выделенную память с помощью оператора delete.
-//5.+	Создать в классе методы доступа к одиночному элементу данных объекта(по чтению и записи), отображения данных на экран, 
-//преобразования данных объекта(например, сортировки).
-//6.	Перегрузить операторы - члены класса(согласно варианту) :
-//	--присвоение = ;
-//--индексация элемента[];
-//--инициализация();
-//--унарные арифметические(++);
-//--бинарные арифметические(+или) и сравнения(> или < или == ), причем только для однотипных операндов;
-//7.	Перегрузить дружественные функции - операторы(согласно варианту)::
-//--унарные арифметические(--);
-//--бинарные арифметические(+или) и сравнения(> или < или == ), причем для разных типов операндов;
-//--вывода в поток(<< ).
-//8.	В головной функции создать несколько экземпляров базового класса.Провести вызовы перегруженных функций и операторов.Вывести результаты на экран.
-//9.	В головной функции динамически создать и проинициализировать экземпляр базового класса.Динамически создать его копию.Выполнить
-//преобразование данных экземпляра базового класса.Вывести содержимое обоих экземпляров на экран.Удалить экземпляры.
-//10.	В головной функции динамически создать массив экземпляров класса.Каждый из них проинициализировать.Выполнить доступ к элементам 
-//данных экземпляров классов.Удалить массивы.
-//Класс									Одномерный массив с элементами типа int
-//Операторы-члены класса				бинарные арифметические (+ и  -) , причем только для однотипных операндов;
-//Дружественные функции-операторы		вывода в поток (<<)
-//Сортировка							Шелла по возрастанию
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <string>
@@ -39,9 +13,17 @@ public:
 	MShell(int);
 	MShell(MShell&);
 	~MShell();
-	friend class Shell;
 	friend void show(MShell);
-	//friend void ShellSort(MShell);
+	friend bool sravn(MShell body1, MShell body2);
+	friend const MShell operator+(const MShell& left, const MShell& right)
+	{
+		return (left.ss + right.ss);
+	};
+	friend const MShell operator-(const MShell& left, const MShell& right)
+	{
+		return (left.ss - right.ss);
+	};
+	friend ostream& operator<<(ostream& out, const MShell &temp);
 	void ShellSort()
 	{
 		int step, i, j, tmp;
@@ -66,12 +48,13 @@ public:
 		for (int i = 0;i < size;i++)
 			zn[i] = input();
 	};
-	MShell operator+();
-	MShell operator-();
-	//friend MShell operator<<();
 private:
 	int* zn;
 	int ss;
+};
+ostream& operator<<(ostream& out, const MShell& temp) {
+	out << "Size of mas " << temp.ss <<" First element "<<*temp.zn<<endl;
+	return out;
 };
 MShell::MShell()
 {
@@ -101,6 +84,7 @@ MShell::~MShell() {
 	while(!zn) delete[] zn;
 };
 void show(MShell);
+bool sravn(MShell body1, MShell body2);
 int main()
 {
 	int sz = 5;
@@ -112,13 +96,24 @@ int main()
 	show(mas);
 	mas.ShellSort();
 	show(mas);
-	cout << "Size of mas :";
+	cout << "Size of mas : ";
 	sz=input();
-	cout << "\nTime to read mas";
+	cout << "\nTime to read mas : ";
 	mas.ReadMass(sz);
 	show(mas);
 	mas.ShellSort();
 	show(mas);
+	MShell mas2;
+	mas2 = MShell(5);
+	cout << "Work with operator +, - and << \n";
+	MShell mas3;
+	mas3=mas + mas2;
+	show(mas3);
+	cout << mas3;
+	if (sravn(mas2 , mas))
+	mas3 = mas2 - mas; else mas3 = mas - mas2;
+	show(mas3);
+	cout << mas3;
 	return 0;
 }
 void show(MShell body) 
@@ -126,6 +121,9 @@ void show(MShell body)
 	for (int i = 0;i < body.ss;i++)
 		cout << body.zn[i]<<" ";
 	cout << endl;
+}
+bool sravn(MShell body1, MShell body2) {
+	if (body1.ss > body2.ss) return 1; else return 0;
 }
 int input() {
 	int i = 1, _int;
