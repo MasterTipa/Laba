@@ -126,16 +126,19 @@ bool sravn(MShell body1, MShell body2) {
 	if (body1.ss > body2.ss) return 1; else return 0;
 }
 int input() {
-	int i = 1, _int;
-	while (i)
+
+	int i;
+	bool fail = true;
+	cout << "\nInput:";
+	do
 	{
-		cin >> _int;
-		if (!cin) {
-			cout << "Yarik, buffer potik\n";
-			rewind(stdin);
-			cin.clear();
-		}
-		else i = 0;
-	}
-	return _int;
+		cin >> i;
+		if (cin.fail() || cin.rdbuf()->in_avail() > 1)
+			cout << "\nError" << endl;
+		else
+			fail = false;
+		cin.clear();
+		cin.ignore(cin.rdbuf()->in_avail());
+	} while (fail);
+	return i;
 }
