@@ -52,7 +52,8 @@ private:
 	int ss;
 };
 ostream& operator<<(ostream& out, const MShell& temp) {
-	out << "Size of mas " << temp.ss <<" First element "<<*temp.zn<<endl;
+	if (temp.ss == 0) out << "Size of mas ";
+	else out << "Size of mas " << temp.ss <<" First element "<<*temp.zn<<endl;
 	return out;
 };
 MShell::MShell()
@@ -79,7 +80,7 @@ MShell::MShell(MShell& copy)
 		zn[i] = copy.zn[i];
 };
 MShell::~MShell() {
-	//cout << "4" << endl;
+	//cout << "4gg" << endl;
 	while(!zn) delete[] zn;
 };
 void show(MShell);
@@ -89,35 +90,35 @@ int main()
 	int sz = 5;
 	srand(time(NULL));
 	MShell mas;
-	mas=MShell();	//Конструктор по умолчанию
-	show(mas);		//Вывод созданной ерунды
-	mas=MShell(sz);	//Конструктор с параметром
-	show(mas);		//Вывод созданной ерунды
-	mas.ShellSort();//Его сортировка
-	show(mas);		//Вывод отсортированной ерунды
+	mas=MShell();		//Конструктор по умолчанию
+	show(mas);			//Вывод созданной ерунды
+	mas=MShell(sz);		//Конструктор с параметром
+	show(mas);			//Вывод созданной ерунды
+	mas.ShellSort();	//Его сортировка
+	show(mas);			//Вывод отсортированной ерунды
 	cout << "Size of mas : ";
 	sz=inputs();		//Ввод размера массива
 	cout << "\nTime to read mas : ";
-	mas.ReadMass(sz);//Вводим значения новоиспечённого массива
-	show(mas);		//Выводим данный массив
-	mas.ShellSort();//Сортировка нового массива
-	show(mas);		//Показать красату
-	MShell mas2;	//Создаём ещё один экземпляр класса
+	mas.ReadMass(sz);	//Вводим значения новоиспечённого массива
+	show(mas);			//Выводим данный массив
+	mas.ShellSort();	//Сортировка нового массива
+	show(mas);			//Показать красату
+	MShell mas2;		//Создаём ещё один экземпляр класса
 	mas2 = MShell(5);
 	cout << "Work with operator +, - and << \n";
 	MShell mas3;
-	mas3=mas + mas2;//operator +
-	show(mas3);		//показываю новый увеличенный массив с рандомными значениями
-	cout << mas3;	//operator <<
+	mas3=mas + mas2;	//operator +
+	show(mas3);			//показываю новый увеличенный массив с рандомными значениями
+	cout << mas3;		//operator <<
 	if (sravn(mas2 , mas))
-	mas3 = mas2 - mas; 
-	else mas3 = mas - mas2;//operator -
-	show(mas3);		//Всё то же самое
+	mas3 = mas2 - mas;	//operator -
+	else mas3 = mas - mas2;
+	show(mas3);			//Всё то же самое
 	cout << mas3;
 	cout << "\nMake mas of classes\n Hawmany?";
 	int gg=input();
-	MShell* ms;		//Массив классов
-	ms=new MShell[gg];//Выделяю память под массив
+	MShell* ms;			//Массив классов
+	ms=new MShell[gg];	//Выделяю память под массив
 	for (int i = 0;i < gg;i++)
 	{
 		int sz = input();
