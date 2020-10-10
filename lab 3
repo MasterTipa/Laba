@@ -87,7 +87,7 @@ bool sravn(MShell body1, MShell body2);
 int main()
 {
 	int sz = 5;
-	srand(time_t(NULL));
+	srand(time(NULL));
 	MShell mas;
 	mas=MShell();	//Конструктор по умолчанию
 	show(mas);		//Вывод созданной ерунды
