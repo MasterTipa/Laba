@@ -90,30 +90,41 @@ int main()
 	int sz = 5;
 	srand(time_t(NULL));
 	MShell mas;
-	mas=MShell();
-	show(mas);
-	mas=MShell(sz);
-	show(mas);
-	mas.ShellSort();
-	show(mas);
+	mas=MShell();	//Конструктор по умолчанию
+	show(mas);		//Вывод созданной ерунды
+	mas=MShell(sz);	//Конструктор с параметром
+	show(mas);		//Вывод созданной ерунды
+	mas.ShellSort();//Его сортировка
+	show(mas);		//Вывод отсортированной ерунды
 	cout << "Size of mas : ";
-	sz=input();
+	sz=input();		//Ввод размера массива
 	cout << "\nTime to read mas : ";
-	mas.ReadMass(sz);
-	show(mas);
-	mas.ShellSort();
-	show(mas);
-	MShell mas2;
+	mas.ReadMass(sz);//Вводим значения новоиспечённого массива
+	show(mas);		//Выводим данный массив
+	mas.ShellSort();//Сортировка нового массива
+	show(mas);		//Показать красату
+	MShell mas2;	//Создаём ещё один экземпляр класса
 	mas2 = MShell(5);
 	cout << "Work with operator +, - and << \n";
 	MShell mas3;
-	mas3=mas + mas2;
-	show(mas3);
-	cout << mas3;
+	mas3=mas + mas2;//operator +
+	show(mas3);		//показываю новый увеличенный массив с рандомными значениями
+	cout << mas3;	//operator <<
 	if (sravn(mas2 , mas))
-	mas3 = mas2 - mas; else mas3 = mas - mas2;
-	show(mas3);
+	mas3 = mas2 - mas; 
+	else mas3 = mas - mas2;//operator -
+	show(mas3);		//Всё то же самое
 	cout << mas3;
+	cout << "\nMake mas of classes\n Hawmany?";
+	int gg=input();
+	MShell* ms;		//Массив классов
+	ms=new MShell[gg];//Выделяю память под массив
+	for (int i = 0;i < gg;i++)
+	{
+		int sz = input();
+		ms[i].ReadMass(sz);
+	}
+
 	return 0;
 }
 void show(MShell body) 
