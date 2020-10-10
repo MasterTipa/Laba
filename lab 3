@@ -2,10 +2,9 @@
 #include <iostream>
 #include <string>
 #include <ctime>
-
 using namespace std;
-
 int input();
+int inputs();
 class MShell 
 {
 public:
@@ -97,7 +96,7 @@ int main()
 	mas.ShellSort();//Его сортировка
 	show(mas);		//Вывод отсортированной ерунды
 	cout << "Size of mas : ";
-	sz=input();		//Ввод размера массива
+	sz=inputs();		//Ввод размера массива
 	cout << "\nTime to read mas : ";
 	mas.ReadMass(sz);//Вводим значения новоиспечённого массива
 	show(mas);		//Выводим данный массив
@@ -124,7 +123,6 @@ int main()
 		int sz = input();
 		ms[i].ReadMass(sz);
 	}
-
 	return 0;
 }
 void show(MShell body) 
@@ -145,6 +143,23 @@ int input() {
 	{
 		cin >> i;
 		if (cin.fail() || cin.rdbuf()->in_avail() > 1)
+			cout << "\nError" << endl;
+		else
+			fail = false;
+		cin.clear();
+		cin.ignore(cin.rdbuf()->in_avail());
+	} while (fail);
+	return i;
+}
+int inputs() {
+
+	int i;
+	bool fail = true;
+	cout << "\nInput:";
+	do
+	{
+		cin >> i;
+		if (cin.fail() || cin.rdbuf()->in_avail() > 1 || i<=0)
 			cout << "\nError" << endl;
 		else
 			fail = false;
