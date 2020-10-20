@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include <ctime>
-using namespace std;																					+
+using namespace std;
 class BoardGame {
 protected:
 	string NameOfGame;
@@ -12,12 +12,12 @@ public:
 		this->NameOfGame=name;
 	};
 	~BoardGame() { cout << "\nDestroy\n"; };
-	void Output()
+	virtual void Output()
 	{
 		cout << NameOfGame << endl;
 	};
 };
-class CardGame : public BoardGame {
+class CardGame :virtual public BoardGame {
 protected :
 	int Cards;
 public:
@@ -31,7 +31,7 @@ public:
 		cout << NameOfGame << "\n" << Cards;
 	}
 };
-class FigureGame : public BoardGame{
+class FigureGame :virtual public BoardGame{
 protected:
 	int Figure;
 public:
@@ -49,7 +49,7 @@ class CardType : public CardGame {
 protected :
 	string Type;
 public:
-	CardType(string name, int card, string type) :CardGame(name, card)
+	CardType(string name, int card, string type) :CardGame(name, card),BoardGame(name)
 	{
 		this->Type=type;
 	};
@@ -63,7 +63,8 @@ class FigureType :public FigureGame {
 protected:
 	string Type;
 public:
-	FigureType(string name, int figure, string type) :FigureGame(name, figure) {
+	FigureType(string name, int figure, string type) :FigureGame(name, figure),BoardGame(name)
+	{
 		this->Type=type;
 	}
 	~FigureType() { cout << "\nDestroy\n"; };
@@ -77,7 +78,8 @@ protected:
 	int Number;
 public:
 	Gamers(string name, int figure, int card, string type1, string type2, int num) :
-		FigureType(name, figure, type1), CardType(name, card, type2) {
+		FigureType(name, figure, type1), CardType(name, card, type2) , BoardGame(name)
+	{
 		this->Number=num;
 	}
 	~Gamers() { cout << "\nDestroy\n"; };
@@ -91,9 +93,23 @@ public:
 int input();
 int main()
 {
-
+	string Name,Type1,Type2;
+	cout << "Input name of game : ";
+	rewind(stdin);
+	getline(cin, Name);
+	cout << "Input type of figure : ";
+	rewind(stdin);
+	getline(cin, Type1);
+	cout << "Input type of card : ";
+	rewind(stdin);
+	getline(cin, Type2);
+	int Figure=input(), Cards=input(), Number=input();
 	Gamers *ss=new Gamers("Gacha",69,32,"Squrd","Poker",6);
 	ss->Output();
+	delete ss;
+	Gamers* ll = new Gamers(Name,Figure,Cards,Type1,Type2,Number);
+	ll->Output();
+	delete ll;
 }
 int input() {
 	int i;
