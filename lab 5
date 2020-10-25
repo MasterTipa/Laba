@@ -13,10 +13,10 @@ using namespace std;
 //3.	Создать в базовом классе чисто виртуальные функции расчета(например, расчет площади фигуры и т.п.) и вывода объекта на экран(всех его параметров).		+
 //	Выполнить реализацию этих виртуальных функций в классах наследниках.																						+
 //4.	Задать в базовом классе деструктор как виртуальный.																										+
-//5.	В головной функции динамически создать массив указателей на базовый класс.Заполнить массив указателями на динамически создаваемые объекты 
-//	производных классов(P1, P11, P2).Для каждого элемента массива проверить работу виртуальных функций.Удалить из памяти динамически выделенные объекты.
-//6.	Всё взаимодействие с экземплярами производных классов производить через указатель на базовый класс.
-//7.	Сгенерировать диаграмму классов
+//5.	В головной функции динамически создать массив указателей на базовый класс.Заполнить массив указателями на динамически создаваемые объекты				+
+//	производных классов(P1, P11, P2).Для каждого элемента массива проверить работу виртуальных функций.Удалить из памяти динамически выделенные объекты.		+
+//6.	Всё взаимодействие с экземплярами производных классов производить через указатель на базовый класс.														+
+//7.	Сгенерировать диаграмму классов																															+
 
 class BoardGame {
 protected:
@@ -31,8 +31,8 @@ public:
 	{
 		cout << NameOfGame << endl;
 	};
-	virtual int HManyF() = 0;
-	virtual int HManyC() = 0;
+	//virtual int HManyF() = 0;
+	//virtual int HManyC() = 0;
 	virtual int FCGame() = 0;
 };
 class CardGame :virtual public BoardGame {
@@ -50,7 +50,9 @@ public:
 	}
 	int FCGame() override 
 	{
-		return 32 / Cards;
+		cout << "\n32 - " << Cards << " = ";
+		int gg = 32 - Cards;
+		return gg;
 	};
 };
 class FigureGame :virtual public BoardGame {
@@ -68,7 +70,9 @@ public:
 	}
 	int FCGame() override
 	{
-		return 16 / Figure;
+		cout << "\n16 - " << Figure << " = ";
+		int gg = 16 - Figure;
+		return gg;
 	}
 };
 class CardType : public CardGame {
@@ -114,16 +118,9 @@ public:
 		cout << "All Figures\n" << FigureType::NameOfGame << "\n" << Figure << "\n" << FigureType::Type << "\n" << Number;
 		cout << "\nAll Card\n" << CardType::NameOfGame << "\n" << Cards << "\n" << CardType::Type << "\n" << Number;
 	};
-	int HManyF() override 
-	{
-		return Figure - Number;
-	};
-	int HManyC() override
-	{
-		return Cards - Number;
-	}
 	int FCGame() override
 	{
+		cout << "\nFigure > Cards = ";
 		return Figure > Cards;
 	}
 };
@@ -147,13 +144,18 @@ int main()
 	cout << "Kak many members : ";
 	int Number = input();
 	
-	Gamers* ss = new Gamers("Gacha", 69, 32, "Squrd", "Poker", 6);
-	ss->Output();
-	delete ss;
-	
-	Gamers* ll = new Gamers(Name, Figure, Cards, Type1, Type2, Number);
-	ll->Output();
-	delete ll;
+	BoardGame* mas[3];
+	mas[0] = new CardGame(Name,Cards);
+	mas[1] = new FigureGame(Name,Figure);
+	mas[2] = new Gamers(Name,Figure,Cards,Type1,Type2,Number);
+	for (int i = 0;i < 3;i++)
+	{
+		mas[i]->Output();
+		cout << mas[i]->FCGame() << endl;
+	}
+	for (int i = 0; i < 3; i++) {
+		delete mas[i];
+	}
 
 }
 int input() {
