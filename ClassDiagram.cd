@@ -1,45 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="BoardGame">
-    <Position X="2.5" Y="0.5" Width="1.5" />
+  <Class Name="casino" Collapsed="true">
+    <Position X="4.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAEAAIAAAAAEAIAAAAgAAAAAAAAAA=</HashCode>
-      <FileName>Лаба 5.cpp</FileName>
+      <HashCode>AAAAAAAAAAAAAAAABAAAggBAAAAEAAAABAAAAAAAAAA=</HashCode>
+      <FileName>ф.cpp</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="CardGame">
-    <Position X="0.75" Y="1" Width="1.5" />
+  <Class Name="kartochnie" Collapsed="true">
+    <Position X="4.25" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAgCAAAAAAAAAAIAAAIAAAAAAAAgAAAAAAAAAA=</HashCode>
-      <FileName>Лаба 5.cpp</FileName>
+      <HashCode>AAAAAAAAAAAAAAEABAQAAAAAEAAAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>ф.cpp</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="FigureGame">
-    <Position X="4.25" Y="1" Width="1.5" />
+  <Class Name="random" Collapsed="true">
+    <Position X="6.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAQAAAIAIAAAAAAAAEAAAgAAAAAAAAAA=</HashCode>
-      <FileName>Лаба 5.cpp</FileName>
+      <HashCode>AAAAAAAAAAAAAAAABAAAAAAAAAAAAAAABASAEAAAAAA=</HashCode>
+      <FileName>ф.cpp</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="CardType">
-    <Position X="0.75" Y="3.5" Width="1.5" />
+  <Class Name="roulette" Collapsed="true">
+    <Position X="8.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAIAAAAAAgAAAAAAQAAAAAAQAA=</HashCode>
-      <FileName>Лаба 5.cpp</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="FigureType">
-    <Position X="4.25" Y="3.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAQAAAAAAAAAAAAAAAIAAAAAAAAAAAAAQQAAAAAAAA=</HashCode>
-      <FileName>Лаба 5.cpp</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="Gamers">
-    <Position X="2.5" Y="4.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAEAIAAAAIAEAAAAAgAAAAAAAAAA=</HashCode>
-      <FileName>Лаба 5.cpp</FileName>
+      <HashCode>AAAAAAAAAAAAAAAABAAAAAAAAAAgAAAIBAAAAAIAAAA=</HashCode>
+      <FileName>ф.cpp</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
