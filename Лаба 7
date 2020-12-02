@@ -1,313 +1,322 @@
-Что-то скоро будет
 #include <iostream>
-#include<string>
+#include <string>
+#include <exception>
+#include<time.h>
+#include <cstdlib>        
+
 using namespace std;
 
-class cat
-{
+template <class T>
+class Stac;
+
+class Kotik {
 private:
-	static int in;
 	int id;
 	string name;
-	string diagnosis;
+	string diagnos;
 public:
-	cat(string nm, string dg) : name(nm), diagnosis(dg)
+	Kotik() :id(0), name("Blank "), diagnos("Blank ") { }
+	Kotik(string t_name, string t_diagnos, int id) :name(t_name), diagnos(t_diagnos), id(id) { }
+	~Kotik() { }
+	bool operator< (const Kotik& kot) { return id < kot.id; }
+	bool operator> (const Kotik& kot) { return id > kot.id; }
+	bool operator== (const Kotik& kot) { return id == kot.id && name == kot.name; }
+	friend ostream& operator<< (ostream& out, const Kotik& Kotik)
 	{
-		id = in;
-		in++;
+		out << Kotik.id << ' ' << Kotik.name << ' ' << Kotik.diagnos << '\n'; return out;
 	}
-	cat()
-	{
-		id = 0;
-		in++;
-		name = "-";
-		diagnosis = "-";
-	}
-	void input()
-	{
-		cout << "\nEnter your pet's name" << endl;
-		getline(cin,name);
-		cout << "\nEnter your pet's diagnosis" << endl;
-		getline(cin, diagnosis);
-		
-	}
-	void output()
-	{
-		cout << "\nId - " << id << "\nName - " << name << "\nDiagnosis - " << diagnosis << endl;
-	}
-	bool operator< (cat& c2) const
-	{
-		return (name[0] < c2.name[0]) ? true : false;
-	}
-	bool operator> (cat& c2) const
-	{
-		return (name[0] > c2.name[0]) ? true : false;
-	}
-	bool operator== (cat& c2) const
-	{
-		return (name[0] == c2.name[0]) ? true : false;
-	}
-	friend ostream& operator<<(ostream& out, const cat c);
+
 };
-int cat::in = 1;
-ostream& operator<<(ostream& out, const cat c)
-{
-	out << "\nId - " << c.id << "\nName - " << c.name << "\nDiagnosis - " << c.diagnosis << endl;
-	return out;
-}
 
 class Exception
 {
+public:
+	Exception(const string errorMessage = "Something wrong") : m_ErrorMessage(errorMessage) { }
+	friend ostream& operator<< (ostream& out, const Exception& ex) { out << ex.m_ErrorMessage << '\n'; return out; }
+private:
+	string m_ErrorMessage;
 };
 
+template <class T>
+struct Node {
+	T value;
+	Node* left, * right;
+	Node() : value() { left = right = nullptr; }
+};
 
-void my_terminate() 
-{
-	cerr << "\nTerminate handler called"<<endl;
-	abort();
-}
-void my_unexpected()
-{
-	cerr << "\nUnexpected exception"<<endl;
-	terminate();
-}
-
-
-template <typename T>
-class  Node
+template <class T>
+class Iterator
 {
 public:
-	T data;
-	Node* next;
-	Node() : data(), next(nullptr) { }
-	Node(T d) : data(d), next(nullptr) { }
+	friend class Stac<T>;
+	Iterator(Node<T>* node = nullptr) : node(node) { }
+	~Iterator() { }
+	Iterator(const Iterator& it) { node = it.node; }
+	Iterator& operator=(const Iterator& it) { node = it.node; return *this; }
+	T& operator*() {
+		if (node == nullptr)
+			throw Exception("Empty iterator");
+		return node->value;
+	}
+	T* operator->() { if (node == nullptr) throw Exception("Empty iterator"); return &node->value; }
+	Iterator& operator++() { if (node == nullptr) throw Exception("Empty iterator"); node = node->right; return *this; }
+	Iterator& operator--() { if (node == nullptr) throw Exception("Empty iterator"); node = node->left; return *this; }
+	Iterator operator++(int unused) { if (node == nullptr) throw Exception("Empty iterator"); Iterator res = *this; node = node->right; return res; }
+	Iterator operator--(int unused) { if (node == nullptr) throw Exception("Empty iterator"); Iterator res = *this; node = node->left; return res; }
+	bool operator== (const Iterator& it) { return node == it.node; }
+	bool operator!= (const Iterator& it) { return node != it.node; }
+public:
+	Node<T>* node;
 };
-
 
 template<class T>
-class Ring
+class Stac
 {
-private:
-	Node<T>* head;
-	int size;
 public:
-	Ring():head(nullptr),size(0){}
-	void push(T x)
+	typedef Iterator<T> Iterator;
+public:
+	Stac() : head(nullptr) {}
+	~Stac(){}
+	void push(T value, bool unique = false)
 	{
-		if (head == nullptr)
-		{
-			Node<T>* element = new Node<T>(x);
-			head= new Node<T>(x);
-			element->next = head;
-			head = element;
-			size++;
-		}
-		else
-		{
-			Node<T>* tmp = head;
-			int i = 0;
-			while (i < size - 1)
-			{
-				tmp = tmp->next;
-				i++;
+		if (unique) {
+			Iterator it = find(value);
+			if (it != null()) {
+				throw Exception("duplicate value find");
 			}
-			tmp->next = new Node<T>(x);
-			tmp->next->next = head;
-			size++;
 		}
+		Node<T>* newNode = new Node<T>();
+		newNode->value = value;
+		newNode->right = nullptr;
+		newNode->left = nullptr;
+		if (head != nullptr) {
+			head->right = newNode;
+			newNode->left = head;
+		}
+		head = newNode;
 	}
 	void pop()
 	{
-		if (size == 0)
-			throw Exception();
-		Node<T>* tmp = head;
-		head = head->next;
-		delete tmp;
-		size--;
-		Node<T>* t = head;
-		int i = 0;
-		while (i < size - 1)
-		{
-			t = t->next;
-			i++;
-		}
-		t->next = head;
+		if (head == nullptr)
+			throw Exception("Stuck is empty");
+		Node<T>* temp = head;
+		head = head->left;
+		head->right = nullptr;
+		delete temp;
 	}
-	void output()
-	{
-		if (size == 0)
-			throw Exception();
-		Node<T>* tmp = head;
-		int i = 0;
-		while (i < size)
-		{
-			cout << "   " << tmp->data;
-			tmp = tmp->next;
-			i++;
-		}
-	}
-	Node<T>* get_node() {
-		return head;
-	}
-	int get_size() {
-		return size;
-	}
-	friend ostream& operator<<(ostream& out, const Node<T>& node);
+	Iterator erase(Iterator);
+	Iterator find(T value) const;
+	void show() const;
+	Iterator begin() { return Iterator(head); }
+	Iterator null() { return Iterator(); }
+	void swap(Iterator, Iterator);
+private:
+	Node<T>* head;
 };
 
 template<class T>
-class Iterator
+typename Stac<T>::Iterator Stac<T>::erase(Stac<T>::Iterator it)
 {
-private:
-	Node<T>* node;
-	int size;
-	int current;
-public:
-	friend Ring<T>;
-	Iterator(Ring<T>* element) : current(0)
-	{
-		node = element->get_node();
-		size = element->get_size();
+	if (head == nullptr)
+		throw Exception("Stuck is empty");
+	if (it == null())
+		throw Exception("Invalid iterator");
+	Node<T>* temp = it.node;
+	if (it.node->left != nullptr) {
+		it.node = it.node->left;
+		it.node->right = temp->right;
+		if (temp->right != nullptr)
+			temp->right->left = it.node;
+		delete temp;
+		return it;
 	}
-	void begin()
-	{
-		if (size == 0)
-			throw Exception();
-		if (current != 0)
-		{
-			while (current < size)
-			{
-				current++;
-				node = node->next;
-			}
-			current = 0;
-		}
-
+	else {
+		Node<T>* temp = it.node;
+		it.node = it.node->right;
+		it.node->left = nullptr;
+		delete temp;
+		return it;
 	}
-	void search(T x)
-	{
-		if (size == 0)
-			throw Exception();
-		int i = 0;
-		while (i < size)
-		{
-			if (x == node->data)
-			{
-				cout << "\nElement\n " << x << "\nfound" << endl;
-				return;
-			}
-			if (current == size - 1)
-				current = 0;
-			else
-				current++;
-			node = node->next;
-			i++;
-		}
-		cout << "\nElement\n " << x << " \nnot found" << endl;
-	}
-	Iterator& operator++()
-	{
-		if (size == 0)
-			throw Exception();
-		if (size == 1)
-			current = 0;
-		else
-			current++;
-		node = node->next;
-		return *this;
-	}
-	T operator*() {
-		return node->data;
-	}
-	void operator = (T x)
-	{
-		if (size == 0)
-			throw Exception();
-		node->data = x;
-	}
-	Iterator& operator[](int index)
-	{
-		if (size == 0)
-			throw Exception();
-		Node<T>* tmp = node;
-		while (1)
-		{
-			if (current == index)
-			{
-				node = tmp;
-				return *this;
-			}
-			tmp = tmp->next;
-			if (current == size - 1)
-				current = 0;
-			else
-				current++;
-		}
-	}
-	void shell()
-	{
-		if (size == 0)
-			throw Exception();
-		int step, i, j;
-		for (step = size / 2; step > 0; step /= 2)
-			for (i = step; i < size; i++)
-				for (j = i - step; j >= 0 && (*this)[j].node->data > (*this)[j + step].node->data; j -= step)
-				{
-					tmp = (*this)[j].node->data;
-					(*this)[j].node->data = (*this)[j + step].node->data;
-					(*this)[j + step].node->data = tmp;
-				}
-	}
-};
-
-
-
-int main()
- {
-	set_terminate(my_terminate);
-	set_unexpected(my_unexpected);
-	Ring<cat> ring;
-	try
-	{
-		ring.pop();
-	}
-	catch (Exception)
-	{
-		cerr << "\nThe ring is empty\n";
-	}
-	cout << "\n-----------------------------------------------------------------------------------\n";
-	cat c1("Max", "broken paw");
-	ring.push(c1);
-	ring.push(cat("Ledy", "stomach ache"));
-	ring.push(cat("Ochra", "problem with eyes"));
-	cat c4("Gav", "depression");
-	ring.push(c4);
-	ring.push(cat("Onyx", "heart problem"));
-	try
-	{
-		ring.output();
-		cout << "\n-----------------------------------------------------------------------------------\n";
-		Iterator<cat> I(&ring);
-		cout << "\nAFTER SORTING BY NAME" << endl;
-		cout << "\n-----------------------------------------------------------------------------------\n";
-		I.begin();
-		I.shell();
-		ring.output();
-		cout << "\n-----------------------------------------------------------------------------------\n";
-		ring.pop();
-		ring.output();
-		cout << "\n-----------------------------------------------------------------------------------\n";
-		ring.pop();
-		ring.output();
-		cout << "\n-----------------------------------------------------------------------------------\n";
-		I.begin();
-		I.search(c4);
-		I.search(c1);
-	}
-	catch (Exception)
-	{
-		cerr << "\nThe ring is empty\n";
-	}
-	
 }
 
+template<class T>
+typename Stac<T>::Iterator Stac<T>::find(T value) const
+{
+	Node<T>* it = head;
+	do
+	{
+		if (it->value == value)
+			return Iterator(it);
+		it = it->left;
+	} while (it != nullptr);
+	return Iterator();
+}
+
+template<class T>
+void Stac<T>::show() const
+{
+	Node<T>* it = head;
+	while (it->right != nullptr) it = it->right;
+	do
+	{
+		cout << ' ' << it->value;
+		it = it->left;
+	} while (it != nullptr);
+	cout << '\n';
+}
+
+template<class T>
+void Stac<T>::swap(Stac<T>::Iterator it1, Stac<T>::Iterator it2) {
+	Node<T>* temp = nullptr;
+
+	if (it2.node->right) it2.node->right->left = it1.node;
+	temp = it1.node->right;
+	it1.node->right = it2.node->right;
+	it2.node->right = temp;
+	if (temp) temp->left = it2.node;
+	if (it2.node->left) it2.node->left->right = it1.node;
+	temp = it1.node->left;
+	it1.node->left = it2.node->left;
+	it2.node->left = temp;
+	if (temp) temp->right = it2.node;
+
+	if (this->head == it1.node) {
+		this->head = it2.node;
+	}
+	if (this->head == it2.node) {
+		this->head = it1.node;
+	}
+}
+
+template<class T>
+void fastSort(Iterator<T> begin, Iterator<T> end, Stac<T> stac)
+{
+	if (begin == Iterator<T>())
+		throw Exception("Invalid iterator");
+	if (end == Iterator<T>())
+		throw Exception("Invalid iterator");
+	if (begin == end) return;
+	Iterator<T> bgn=begin;
+	Iterator<T> nd=end;
+	for (Iterator<T> i =begin;i!=end;i--)
+	{
+		if (*i < *bgn) 
+		{
+			stac.swap(i,bgn);
+			begin = i;
+			bgn = i;
+		}
+	}
+	for (Iterator<T> i = end;i != begin;i++)
+	{
+		if (*i>*nd)
+		{
+			stac.swap(i, nd);
+			end = i;
+			nd = i;
+		}
+	}
+	begin--;
+	fastSort(begin, end, stac);
+	begin++;end++;
+	fastSort(begin, end, stac);
+	return;
+}
+
+void my_terminate() {
+	cerr << "terminate handler called\n";
+	abort();
+}
+void my_unexpected_handler()
+{
+	cerr << "Unexpected exception\n";
+	terminate();
+}
+
+int main() {
+	srand(time(NULL));
+	set_terminate(my_terminate);
+	set_unexpected(my_unexpected_handler);
+	Stac<Kotik> stac;
+	try {
+		stac.pop();
+	}
+	catch (Exception ex) {
+		cerr << ex;
+	}
+	cout << "\nInserting\n";
+	try {
+		stac.push(Kotik("Stas", "Beba", 11));
+		stac.show();
+		stac.push(Kotik("Danila", "Beba", 20));
+		stac.show();
+		stac.push(Kotik("Anzelika", "Beba", 6));
+		stac.show();
+		stac.push(Kotik("Kek", "Beba", 5));
+		stac.show();
+		stac.push(Kotik("Max", "Beba", 7));
+		stac.show();
+		stac.push(Kotik("Xim", "Beba", 8));
+		stac.show();
+	}
+	catch (Exception ex) { cerr << ex; }
+	try {
+		stac.pop();
+		stac.show();
+		try {
+			cout << "\nErase Kek Beba 5\n";
+			stac.erase(stac.find(Kotik("Kek", "Beba", 5)));
+		}
+		catch (Exception ex) { cerr << ex; };
+		stac.show();
+		try {
+			auto dan = stac.find(Kotik("Max", "Beba", 7));
+			auto anz = stac.find(Kotik("Anzelika", "Beba", 6));
+			stac.swap(dan, anz);
+		}
+		catch (Exception ex) { cerr << ex; };
+		stac.show();
+		try {
+			Stac<Kotik>::Iterator bgn = stac.begin();
+			Stac<Kotik>::Iterator end = stac.begin();
+			while (end.node->left != nullptr) end--;
+			fastSort(bgn, end, stac);
+		}
+		catch (Exception ex) { cerr << ex; };
+		cout << "\nAfter Sorting\n";
+		stac.show();
+	}
+	catch (Exception ex) { cerr << ex; }
+	cout << "\nNew Temp\n";
+	try {
+		Stac<double> stac1;
+		try {
+			stac1.push(4);
+			stac1.show();
+			stac1.push(2);
+			stac1.show();
+			stac1.push(1);
+			stac1.show();
+			stac1.push(0);
+			stac1.show();
+			stac1.push(3);
+			stac1.show();
+			stac1.push(7);
+			stac1.show();
+		}
+		catch (Exception ex) {
+			cerr << ex;
+		}
+		try {
+			Stac<double>::Iterator bgn = stac1.begin();
+			Stac<double>::Iterator end = stac1.begin();
+			while (end.node->left != nullptr) end--;
+			fastSort(bgn, end, stac1);
+		}
+		catch (Exception ex) { cerr << ex; };
+		cout << "\nAfter Sorting\n";
+		stac1.show();
+	}
+	catch (Exception ex) { cerr << ex; };
+	return 0;
+}
