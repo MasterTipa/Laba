@@ -76,7 +76,7 @@ public:
 	typedef Iterator<T> Iterator;
 public:
 	Stac() : head(nullptr) {}
-	~Stac(){}
+	~Stac() {}
 	void push(T value, bool unique = false)
 	{
 		if (unique) {
@@ -107,6 +107,7 @@ public:
 	Iterator erase(Iterator);
 	Iterator find(T value) const;
 	void show() const;
+	void show(Iterator) const;
 	Iterator begin() { return Iterator(head); }
 	Iterator null() { return Iterator(); }
 	void swap(Iterator, Iterator);
@@ -166,6 +167,18 @@ void Stac<T>::show() const
 }
 
 template<class T>
+void Stac<T>::show(Iterator it) const
+{
+	while (it.node->right != nullptr) it.node = it.node->right;
+	do
+	{
+		cout << ' ' << it.node->value;
+		it.node = it.node->left;
+	} while (it.node != nullptr);
+	cout << '\n';
+}
+
+template<class T>
 void Stac<T>::swap(Stac<T>::Iterator it1, Stac<T>::Iterator it2) {
 	Node<T>* temp = nullptr;
 
@@ -221,7 +234,7 @@ void fastSort(Iterator<T> begin, Iterator<T> end, Stac<T> stac)
 	begin++;end++;
 	fastSort(begin, end, stac);
 	return;
-}
+	}
 
 void my_terminate() {
 	cerr << "terminate handler called\n";
@@ -263,6 +276,7 @@ int main() {
 	try {
 		stac.pop();
 		stac.show();
+		stac.show(stac.begin());
 		try {
 			cout << "\nErase Kek Beba 5\n";
 			stac.erase(stac.find(Kotik("Kek", "Beba", 5)));
