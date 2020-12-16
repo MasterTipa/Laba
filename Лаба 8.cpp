@@ -1,10 +1,3 @@
-﻿//"The moment man devoured the fruit of knowledge, he sealed his fate ... 
-//Entrusting his future to the cards, man clings to a dim hope. 
-//Yet, the Arcana is the means by which all is revealed. 
-//Beyond the beaten path lies the absolute end. 
-//It matters not who you are ... 
-//Death awaits you."
-
 #include <iostream>
 #include <fstream>
 #include <string>
